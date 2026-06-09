@@ -1,0 +1,2027 @@
+openapi: 3.0.3
+info:
+  title: ''
+  version: 0.0.0
+paths:
+  /api/schema/:
+    get:
+      operationId: api_schema_retrieve
+      description: |-
+        OpenApi3 schema for this API. Format can be selected via content negotiation.
+
+        - YAML: application/vnd.oai.openapi
+        - JSON: application/vnd.oai.openapi+json
+      parameters:
+      - in: query
+        name: format
+        schema:
+          type: string
+          enum:
+          - json
+          - yaml
+      - in: query
+        name: lang
+        schema:
+          type: string
+          enum:
+          - af
+          - ar
+          - ar-dz
+          - ast
+          - az
+          - be
+          - bg
+          - bn
+          - br
+          - bs
+          - ca
+          - ckb
+          - cs
+          - cy
+          - da
+          - de
+          - dsb
+          - el
+          - en
+          - en-au
+          - en-gb
+          - eo
+          - es
+          - es-ar
+          - es-co
+          - es-mx
+          - es-ni
+          - es-ve
+          - et
+          - eu
+          - fa
+          - fi
+          - fr
+          - fy
+          - ga
+          - gd
+          - gl
+          - he
+          - hi
+          - hr
+          - hsb
+          - hu
+          - hy
+          - ia
+          - id
+          - ig
+          - io
+          - is
+          - it
+          - ja
+          - ka
+          - kab
+          - kk
+          - km
+          - kn
+          - ko
+          - ky
+          - lb
+          - lt
+          - lv
+          - mk
+          - ml
+          - mn
+          - mr
+          - ms
+          - my
+          - nb
+          - ne
+          - nl
+          - nn
+          - os
+          - pa
+          - pl
+          - pt
+          - pt-br
+          - ro
+          - ru
+          - sk
+          - sl
+          - sq
+          - sr
+          - sr-latn
+          - sv
+          - sw
+          - ta
+          - te
+          - tg
+          - th
+          - tk
+          - tr
+          - tt
+          - udm
+          - ug
+          - uk
+          - ur
+          - uz
+          - vi
+          - zh-hans
+          - zh-hant
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/vnd.oai.openapi:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/yaml:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/vnd.oai.openapi+json:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+  /api/v1/ai/chat/:
+    post:
+      operationId: api_v1_ai_chat_create
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/ai/suggestions/{suggestion_id}/track/:
+    post:
+      operationId: api_v1_ai_suggestions_track_create
+      parameters:
+      - in: path
+        name: suggestion_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/auth/login/:
+    post:
+      operationId: api_v1_auth_login_create
+      description: |-
+        Takes a set of user credentials and returns an access and refresh JSON web
+        token pair to prove the authentication of those credentials.
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPair'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPair'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPair'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenObtainPair'
+          description: ''
+  /api/v1/auth/logout/:
+    post:
+      operationId: api_v1_auth_logout_create
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/auth/preferences/:
+    put:
+      operationId: api_v1_auth_preferences_update
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/auth/profile/:
+    get:
+      operationId: api_v1_auth_profile_retrieve
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    patch:
+      operationId: api_v1_auth_profile_partial_update
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/auth/register/:
+    post:
+      operationId: api_v1_auth_register_create
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+  /api/v1/auth/token/refresh/:
+    post:
+      operationId: api_v1_auth_token_refresh_create
+      description: |-
+        Takes a refresh type JSON web token and returns an access type JSON web
+        token if the refresh token is valid.
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenRefresh'
+          description: ''
+  /api/v1/auth/verify-otp/:
+    post:
+      operationId: api_v1_auth_verify_otp_create
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/brokers/leads/:
+    get:
+      operationId: api_v1_brokers_leads_list
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedLeadList'
+          description: ''
+    post:
+      operationId: api_v1_brokers_leads_create
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Lead'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Lead'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Lead'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Lead'
+          description: ''
+  /api/v1/brokers/leads/{id}/:
+    get:
+      operationId: api_v1_brokers_leads_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Lead'
+          description: ''
+    put:
+      operationId: api_v1_brokers_leads_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Lead'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Lead'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Lead'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Lead'
+          description: ''
+    patch:
+      operationId: api_v1_brokers_leads_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedLead'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedLead'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedLead'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Lead'
+          description: ''
+    delete:
+      operationId: api_v1_brokers_leads_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/brokers/profile/:
+    get:
+      operationId: api_v1_brokers_profile_list
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedBrokerProfileList'
+          description: ''
+    post:
+      operationId: api_v1_brokers_profile_create
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BrokerProfile'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/BrokerProfile'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/BrokerProfile'
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BrokerProfile'
+          description: ''
+  /api/v1/brokers/profile/{id}/:
+    get:
+      operationId: api_v1_brokers_profile_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BrokerProfile'
+          description: ''
+    put:
+      operationId: api_v1_brokers_profile_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BrokerProfile'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/BrokerProfile'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/BrokerProfile'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BrokerProfile'
+          description: ''
+    patch:
+      operationId: api_v1_brokers_profile_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedBrokerProfile'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedBrokerProfile'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedBrokerProfile'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BrokerProfile'
+          description: ''
+    delete:
+      operationId: api_v1_brokers_profile_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/notifications/:
+    get:
+      operationId: api_v1_notifications_list
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedNotificationList'
+          description: ''
+  /api/v1/notifications/{id}/:
+    get:
+      operationId: api_v1_notifications_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Notification'
+          description: ''
+  /api/v1/notifications/{id}/mark_read/:
+    post:
+      operationId: api_v1_notifications_mark_read_create
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Notification'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Notification'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Notification'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Notification'
+          description: ''
+  /api/v1/payments/stripe/webhook/:
+    post:
+      operationId: api_v1_payments_stripe_webhook_create
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+  /api/v1/properties/favorites/:
+    get:
+      operationId: api_v1_properties_favorites_list
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedFavoriteList'
+          description: ''
+    post:
+      operationId: api_v1_properties_favorites_create
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Favorite'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Favorite'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Favorite'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Favorite'
+          description: ''
+  /api/v1/properties/favorites/{id}/:
+    get:
+      operationId: api_v1_properties_favorites_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Favorite'
+          description: ''
+    put:
+      operationId: api_v1_properties_favorites_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Favorite'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Favorite'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Favorite'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Favorite'
+          description: ''
+    patch:
+      operationId: api_v1_properties_favorites_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedFavorite'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedFavorite'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedFavorite'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Favorite'
+          description: ''
+    delete:
+      operationId: api_v1_properties_favorites_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/properties/listings/:
+    get:
+      operationId: api_v1_properties_listings_list
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedPropertyListList'
+          description: ''
+    post:
+      operationId: api_v1_properties_listings_create
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PropertyDetail'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PropertyDetail'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PropertyDetail'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PropertyDetail'
+          description: ''
+  /api/v1/properties/listings/{id}/:
+    get:
+      operationId: api_v1_properties_listings_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this property.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PropertyDetail'
+          description: ''
+    put:
+      operationId: api_v1_properties_listings_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this property.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PropertyDetail'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PropertyDetail'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PropertyDetail'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PropertyDetail'
+          description: ''
+    patch:
+      operationId: api_v1_properties_listings_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this property.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedPropertyDetail'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedPropertyDetail'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedPropertyDetail'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PropertyDetail'
+          description: ''
+    delete:
+      operationId: api_v1_properties_listings_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this property.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/properties/visits/:
+    get:
+      operationId: api_v1_properties_visits_list
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedVisitRequestList'
+          description: ''
+    post:
+      operationId: api_v1_properties_visits_create
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VisitRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/VisitRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/VisitRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VisitRequest'
+          description: ''
+  /api/v1/properties/visits/{id}/:
+    get:
+      operationId: api_v1_properties_visits_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VisitRequest'
+          description: ''
+    put:
+      operationId: api_v1_properties_visits_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VisitRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/VisitRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/VisitRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VisitRequest'
+          description: ''
+    patch:
+      operationId: api_v1_properties_visits_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedVisitRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedVisitRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedVisitRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VisitRequest'
+          description: ''
+    delete:
+      operationId: api_v1_properties_visits_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+components:
+  schemas:
+    BrokerProfile:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        user_email:
+          type: string
+          format: email
+          readOnly: true
+        company_name:
+          type: string
+          nullable: true
+          maxLength: 200
+        license_number:
+          type: string
+          nullable: true
+          maxLength: 50
+        is_verified:
+          type: boolean
+          readOnly: true
+        rating:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,1}(?:\.\d{0,2})?$
+          readOnly: true
+        total_leads:
+          type: integer
+          readOnly: true
+        subscription_plan:
+          allOf:
+          - $ref: '#/components/schemas/SubscriptionPlanEnum'
+          readOnly: true
+      required:
+      - id
+      - is_verified
+      - rating
+      - subscription_plan
+      - total_leads
+      - user_email
+    Favorite:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        property:
+          type: string
+          format: uuid
+        property_details:
+          allOf:
+          - $ref: '#/components/schemas/PropertyList'
+          readOnly: true
+        source:
+          allOf:
+          - $ref: '#/components/schemas/FavoriteSourceEnum'
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - id
+      - property
+      - property_details
+      - source
+    FavoriteSourceEnum:
+      enum:
+      - manual
+      - ai_suggestion
+      - ai_recommendation
+      type: string
+      description: |-
+        * `manual` - Manual
+        * `ai_suggestion` - AI Suggestion
+        * `ai_recommendation` - AI Recommendation
+    FinishingEnum:
+      enum:
+      - super_lux
+      - lux
+      - semi_lux
+      - standard
+      - core_shell
+      type: string
+      description: |-
+        * `super_lux` - Super Lux
+        * `lux` - Lux
+        * `semi_lux` - Semi Lux
+        * `standard` - Standard
+        * `core_shell` - Core & Shell
+    Lead:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        property:
+          type: string
+          format: uuid
+        property_title:
+          type: string
+          readOnly: true
+        buyer_name:
+          type: string
+          maxLength: 120
+        buyer_phone:
+          type: string
+          maxLength: 20
+        buyer_email:
+          type: string
+          format: email
+          nullable: true
+          maxLength: 254
+        status:
+          $ref: '#/components/schemas/LeadStatusEnum'
+        notes:
+          type: string
+          nullable: true
+        source:
+          allOf:
+          - $ref: '#/components/schemas/LeadSourceEnum'
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - buyer_name
+      - buyer_phone
+      - created_at
+      - id
+      - property
+      - property_title
+      - source
+    LeadSourceEnum:
+      enum:
+      - ai_match
+      - search
+      - direct
+      - referral
+      type: string
+      description: |-
+        * `ai_match` - AI Match
+        * `search` - Search
+        * `direct` - Direct
+        * `referral` - Referral
+    LeadStatusEnum:
+      enum:
+      - new
+      - hot
+      - warm
+      - cold
+      - converted
+      type: string
+      description: |-
+        * `new` - New
+        * `hot` - Hot
+        * `warm` - Warm
+        * `cold` - Cold
+        * `converted` - Converted
+    Notification:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        type:
+          allOf:
+          - $ref: '#/components/schemas/TypeEnum'
+          readOnly: true
+        title:
+          type: string
+          readOnly: true
+        body:
+          type: string
+          readOnly: true
+        data:
+          readOnly: true
+          nullable: true
+        is_read:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - body
+      - created_at
+      - data
+      - id
+      - title
+      - type
+    PaginatedBrokerProfileList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/BrokerProfile'
+    PaginatedFavoriteList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Favorite'
+    PaginatedLeadList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Lead'
+    PaginatedNotificationList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Notification'
+    PaginatedPropertyListList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/PropertyList'
+    PaginatedVisitRequestList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/VisitRequest'
+    PatchedBrokerProfile:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        user_email:
+          type: string
+          format: email
+          readOnly: true
+        company_name:
+          type: string
+          nullable: true
+          maxLength: 200
+        license_number:
+          type: string
+          nullable: true
+          maxLength: 50
+        is_verified:
+          type: boolean
+          readOnly: true
+        rating:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,1}(?:\.\d{0,2})?$
+          readOnly: true
+        total_leads:
+          type: integer
+          readOnly: true
+        subscription_plan:
+          allOf:
+          - $ref: '#/components/schemas/SubscriptionPlanEnum'
+          readOnly: true
+    PatchedFavorite:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        property:
+          type: string
+          format: uuid
+        property_details:
+          allOf:
+          - $ref: '#/components/schemas/PropertyList'
+          readOnly: true
+        source:
+          allOf:
+          - $ref: '#/components/schemas/FavoriteSourceEnum'
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+    PatchedLead:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        property:
+          type: string
+          format: uuid
+        property_title:
+          type: string
+          readOnly: true
+        buyer_name:
+          type: string
+          maxLength: 120
+        buyer_phone:
+          type: string
+          maxLength: 20
+        buyer_email:
+          type: string
+          format: email
+          nullable: true
+          maxLength: 254
+        status:
+          $ref: '#/components/schemas/LeadStatusEnum'
+        notes:
+          type: string
+          nullable: true
+        source:
+          allOf:
+          - $ref: '#/components/schemas/LeadSourceEnum'
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+    PatchedPropertyDetail:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        images:
+          type: array
+          items:
+            $ref: '#/components/schemas/PropertyImage'
+          readOnly: true
+        broker_info:
+          type: string
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        title:
+          type: string
+          maxLength: 200
+        description:
+          type: string
+          nullable: true
+        property_type:
+          $ref: '#/components/schemas/PropertyTypeEnum'
+        status:
+          $ref: '#/components/schemas/Status9ddEnum'
+        price:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          format: int64
+        area:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          format: int64
+        bedrooms:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+        bathrooms:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+        floor:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          format: int64
+          nullable: true
+        finishing:
+          $ref: '#/components/schemas/FinishingEnum'
+        latitude:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,6})?$
+          nullable: true
+        longitude:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,6})?$
+          nullable: true
+        city:
+          type: string
+          maxLength: 50
+        area_name:
+          type: string
+          maxLength: 100
+        address:
+          type: string
+          nullable: true
+        amenities:
+          nullable: true
+        payment_plan:
+          nullable: true
+        is_featured:
+          type: boolean
+        views_count:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          format: int64
+        broker:
+          type: string
+          format: uuid
+    PatchedVisitRequest:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        property:
+          type: string
+          format: uuid
+        property_title:
+          type: string
+          readOnly: true
+        visit_date:
+          type: string
+          format: date
+        visit_time:
+          type: string
+          format: time
+        visit_type:
+          $ref: '#/components/schemas/VisitTypeEnum'
+        status:
+          allOf:
+          - $ref: '#/components/schemas/VisitRequestStatusEnum'
+          readOnly: true
+        notes:
+          type: string
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+    PropertyDetail:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        images:
+          type: array
+          items:
+            $ref: '#/components/schemas/PropertyImage'
+          readOnly: true
+        broker_info:
+          type: string
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        title:
+          type: string
+          maxLength: 200
+        description:
+          type: string
+          nullable: true
+        property_type:
+          $ref: '#/components/schemas/PropertyTypeEnum'
+        status:
+          $ref: '#/components/schemas/Status9ddEnum'
+        price:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          format: int64
+        area:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          format: int64
+        bedrooms:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+        bathrooms:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+        floor:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          format: int64
+          nullable: true
+        finishing:
+          $ref: '#/components/schemas/FinishingEnum'
+        latitude:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,6})?$
+          nullable: true
+        longitude:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,6})?$
+          nullable: true
+        city:
+          type: string
+          maxLength: 50
+        area_name:
+          type: string
+          maxLength: 100
+        address:
+          type: string
+          nullable: true
+        amenities:
+          nullable: true
+        payment_plan:
+          nullable: true
+        is_featured:
+          type: boolean
+        views_count:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          format: int64
+        broker:
+          type: string
+          format: uuid
+      required:
+      - area
+      - area_name
+      - bathrooms
+      - bedrooms
+      - broker
+      - broker_info
+      - city
+      - created_at
+      - finishing
+      - id
+      - images
+      - price
+      - property_type
+      - title
+      - updated_at
+    PropertyImage:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        image:
+          type: string
+          format: uri
+        is_primary:
+          type: boolean
+        order:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+      required:
+      - id
+      - image
+    PropertyList:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        title:
+          type: string
+          maxLength: 200
+        price:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          format: int64
+        area:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          format: int64
+        bedrooms:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+        bathrooms:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+        city:
+          type: string
+          maxLength: 50
+        area_name:
+          type: string
+          maxLength: 100
+        status:
+          $ref: '#/components/schemas/Status9ddEnum'
+        primary_image:
+          type: string
+          readOnly: true
+        broker_name:
+          type: string
+          readOnly: true
+        is_featured:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - area
+      - area_name
+      - bathrooms
+      - bedrooms
+      - broker_name
+      - city
+      - created_at
+      - id
+      - price
+      - primary_image
+      - title
+    PropertyTypeEnum:
+      enum:
+      - apartment
+      - villa
+      - duplex
+      - studio
+      - penthouse
+      - townhouse
+      type: string
+      description: |-
+        * `apartment` - Apartment
+        * `villa` - Villa
+        * `duplex` - Duplex
+        * `studio` - Studio
+        * `penthouse` - Penthouse
+        * `townhouse` - Townhouse
+    Status9ddEnum:
+      enum:
+      - active
+      - pending
+      - sold
+      - draft
+      type: string
+      description: |-
+        * `active` - Active
+        * `pending` - Pending
+        * `sold` - Sold
+        * `draft` - Draft
+    SubscriptionPlanEnum:
+      enum:
+      - free
+      - basic
+      - pro
+      - elite
+      type: string
+      description: |-
+        * `free` - Free
+        * `basic` - Basic
+        * `pro` - Pro
+        * `elite` - Elite
+    TokenObtainPair:
+      type: object
+      properties:
+        email:
+          type: string
+          writeOnly: true
+        password:
+          type: string
+          writeOnly: true
+        access:
+          type: string
+          readOnly: true
+        refresh:
+          type: string
+          readOnly: true
+      required:
+      - access
+      - email
+      - password
+      - refresh
+    TokenRefresh:
+      type: object
+      properties:
+        access:
+          type: string
+          readOnly: true
+        refresh:
+          type: string
+      required:
+      - access
+      - refresh
+    TypeEnum:
+      enum:
+      - new_match
+      - visit_confirmed
+      - new_lead
+      - price_drop
+      - message
+      type: string
+      description: |-
+        * `new_match` - New Match
+        * `visit_confirmed` - Visit Confirmed
+        * `new_lead` - New Lead
+        * `price_drop` - Price Drop
+        * `message` - Message
+    VisitRequest:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        property:
+          type: string
+          format: uuid
+        property_title:
+          type: string
+          readOnly: true
+        visit_date:
+          type: string
+          format: date
+        visit_time:
+          type: string
+          format: time
+        visit_type:
+          $ref: '#/components/schemas/VisitTypeEnum'
+        status:
+          allOf:
+          - $ref: '#/components/schemas/VisitRequestStatusEnum'
+          readOnly: true
+        notes:
+          type: string
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - id
+      - property
+      - property_title
+      - status
+      - visit_date
+      - visit_time
+      - visit_type
+    VisitRequestStatusEnum:
+      enum:
+      - pending
+      - confirmed
+      - cancelled
+      - done
+      type: string
+      description: |-
+        * `pending` - Pending
+        * `confirmed` - Confirmed
+        * `cancelled` - Cancelled
+        * `done` - Done
+    VisitTypeEnum:
+      enum:
+      - in_person
+      - virtual
+      type: string
+      description: |-
+        * `in_person` - In Person
+        * `virtual` - Virtual
+  securitySchemes:
+    jwtAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
