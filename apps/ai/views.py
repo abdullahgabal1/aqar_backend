@@ -1,4 +1,5 @@
 import logging
+from django.utils import timezone
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import permissions, status
@@ -10,12 +11,13 @@ from rest_framework import serializers as drf_serializers
 from .models import AIConversation, AIPropertySuggestion
 from properties.models import Property
 from core.utils import send_response
+from core.permissions import IsVerified
 
 logger = logging.getLogger(__name__)
 
 
 class AIChatView(APIView):
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated, IsVerified]
 
     @extend_schema(
         request=inline_serializer(
@@ -89,14 +91,23 @@ class TrackSuggestionInteractionView(APIView):
             AIPropertySuggestion, id=suggestion_id, user=request.user
         )
 
+        now = timezone.now()
+        update_fields = []
+
         if action_type == 'click':
             suggestion.was_clicked = True
+            suggestion.clicked_at = now
+            update_fields = ['was_clicked', 'clicked_at']
         elif action_type == 'save':
             suggestion.was_saved = True
+            suggestion.saved_at = now
+            update_fields = ['was_saved', 'saved_at']
         elif action_type == 'visit':
             suggestion.was_visited = True
+            suggestion.visited_at = now
+            update_fields = ['was_visited', 'visited_at']
         else:
             return send_response(status=400, message='Invalid action. Use click, save, or visit.')
 
-        suggestion.save()
+        suggestion.save(update_fields=update_fields)
         return send_response(message='Tracked.')

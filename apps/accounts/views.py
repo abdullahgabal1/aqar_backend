@@ -45,14 +45,23 @@ class VerifyOTPView(APIView):
     def post(self, request):
         serializer = VerifyOTPSerializer(data=request.data)
         if serializer.is_valid():
-            is_valid = verify_otp_code(
+            is_valid, reason = verify_otp_code(
                 request.user,
                 serializer.validated_data['otp'],
                 serializer.validated_data['channel'],
             )
             if is_valid:
                 return send_response(data={'verified': True}, message='Account verified.')
-            return send_response(status=400, message='Invalid or expired OTP.')
+            
+            # Return appropriate error message based on failure reason
+            error_messages = {
+                'invalid_code': 'Invalid OTP code. Please try again.',
+                'expired': 'OTP has expired. Please request a new one.',
+                'too_many_attempts': 'Too many failed attempts. Please request a new OTP.',
+                'invalid_channel': 'Invalid channel.',
+            }
+            message = error_messages.get(reason, 'Verification failed.')
+            return send_response(status=400, message=message)
         return send_response(status=400, message='Validation error')
 
 

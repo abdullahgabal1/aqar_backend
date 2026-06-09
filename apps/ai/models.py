@@ -42,6 +42,7 @@ class AIPropertySuggestion(BaseModel):
     was_visited = models.BooleanField(default=False)
     clicked_at = models.DateTimeField(null=True, blank=True)
     saved_at = models.DateTimeField(null=True, blank=True)
+    visited_at = models.DateTimeField(null=True, blank=True)
 
     class Meta:
         unique_together = ('user', 'conversation', 'property')
