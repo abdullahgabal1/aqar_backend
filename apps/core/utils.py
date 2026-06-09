@@ -1,11 +1,12 @@
-import random
 import re
 from rest_framework.response import Response
+
 
 def generate_otp(length=6):
     """Generate a cryptographically secure numeric OTP."""
     import secrets
     return ''.join(str(secrets.choice(range(10))) for _ in range(length))
+
 
 def egypt_phone_normalize(phone):
     """Normalize phone to +20xxxxxxxxxx"""
@@ -18,11 +19,15 @@ def egypt_phone_normalize(phone):
         return f'+{phone}'
     return f'+{phone}'
 
-def send_response(data=None, status=200, message='Success'):
-    """Uniform API response envelope."""
+
+def send_response(data=None, status=200, message='Success', errors=None):
+    """
+    Uniform API response envelope used across all views.
+    Automatically determines 'success' from the HTTP status code.
+    """
     return Response({
-        'success': True if 200 <= status < 300 else False,
+        'success': 200 <= status < 300,
         'message': message,
         'data': data,
-        'errors': None
+        'errors': errors,
     }, status=status)

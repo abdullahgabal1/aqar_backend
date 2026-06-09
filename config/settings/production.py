@@ -13,13 +13,21 @@ SECURE_HSTS_SECONDS = 31536000
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 SECURE_HSTS_PRELOAD = True
 
-# Sentry
-import sentry_sdk
-sentry_sdk.init(
-    dsn=config('SENTRY_DSN', default=''),
-    traces_sample_rate=1.0,
-    profiles_sample_rate=1.0,
-)
+# Sentry — guarded import so missing package gives a clear error at startup
+try:
+    import sentry_sdk
+    sentry_dsn = config('SENTRY_DSN', default='')
+    if sentry_dsn:
+        sentry_sdk.init(
+            dsn=sentry_dsn,
+            traces_sample_rate=0.2,
+            profiles_sample_rate=0.1,
+        )
+except ImportError:
+    import logging
+    logging.getLogger(__name__).warning(
+        "sentry-sdk not installed. Add it to requirements/production.txt"
+    )
 
 # AWS S3 Storage
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
