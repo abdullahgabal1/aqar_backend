@@ -6,7 +6,9 @@ class OTPRateThrottle(AnonRateThrottle):
     Strict per-IP rate limit for OTP endpoints (register, verify).
     5 attempts per 15 minutes to prevent brute-force on 6-digit OTPs.
     """
-    rate = '5/15min'
+    # DRF expects the unit character first followed by the multiplier (e.g. 'm15' for 15 minutes).
+    # So '5/m15' = 5 requests per 15 minutes.
+    rate = '5/m15'
     scope = 'otp'
 
     def get_cache_key(self, request, view):

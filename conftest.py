@@ -28,8 +28,11 @@ def create_user(db):
 
 @pytest.fixture
 def auth_client(api_client, create_user):
-    """Returns an authenticated APIClient."""
+    """Returns an authenticated APIClient with verified user."""
     user = create_user()
+    # Verify user for tests that require IsVerified
+    user.is_verified = True
+    user.save(update_fields=['is_verified'])
     api_client.force_authenticate(user=user)
     return api_client, user
 
@@ -44,6 +47,9 @@ def broker_user(db):
         full_name='Test Broker',
         role='broker',
     )
+    # Mark broker as verified for property creation tests
+    user.is_verified = True
+    user.save(update_fields=['is_verified'])
     broker_profile = BrokerProfile.objects.create(
         user=user,
         company_name='Test Realty',
