@@ -6,7 +6,7 @@ from .serializers import (
     PropertyListSerializer, PropertyDetailSerializer,
     FavoriteSerializer, VisitRequestSerializer,
 )
-from core.permissions import IsBroker
+from core.permissions import IsBroker, IsVerified, IsOwnerOrAdmin
 from core.utils import send_response
 
 
@@ -17,8 +17,18 @@ class PropertyViewSet(viewsets.ModelViewSet):
     ).select_related('broker', 'broker__user')
 
     def get_permissions(self):
-        if self.action in ['create', 'update', 'partial_update', 'destroy']:
-            return [IsBroker()]
+        # Public read access
+        if self.action in ['list', 'retrieve']:
+            return [permissions.AllowAny()]
+
+        # Creation requires broker role and verified account
+        if self.action == 'create':
+            return [IsBroker(), IsVerified()]
+
+        # Updates and deletes require broker role, verified account, and ownership
+        if self.action in ['update', 'partial_update', 'destroy']:
+            return [IsBroker(), IsVerified(), IsOwnerOrAdmin()]
+
         return [permissions.AllowAny()]
 
     def get_serializer_class(self):
@@ -36,8 +46,16 @@ class PropertyViewSet(viewsets.ModelViewSet):
 
 
 class FavoriteViewSet(viewsets.ModelViewSet):
-    permission_classes = [permissions.IsAuthenticated]
     serializer_class = FavoriteSerializer
+
+    def get_permissions(self):
+        # All favorite actions require authenticated, verified users by default
+        if self.action in ['create', 'list', 'retrieve']:
+            return [permissions.IsAuthenticated(), IsVerified()]
+        # Modifying/deleting favorites requires ownership
+        if self.action in ['update', 'partial_update', 'destroy']:
+            return [permissions.IsAuthenticated(), IsVerified(), IsOwnerOrAdmin()]
+        return [permissions.IsAuthenticated(), IsVerified()]
 
     def get_queryset(self):
         # Fix soft-delete bypass: only include non-deleted properties via select_related
@@ -51,8 +69,16 @@ class FavoriteViewSet(viewsets.ModelViewSet):
 
 
 class VisitRequestViewSet(viewsets.ModelViewSet):
-    permission_classes = [permissions.IsAuthenticated]
     serializer_class = VisitRequestSerializer
+
+    def get_permissions(self):
+        # Creating and listing visit requests require authenticated, verified users
+        if self.action in ['create', 'list', 'retrieve']:
+            return [permissions.IsAuthenticated(), IsVerified()]
+        # Modifying/deleting visit requests requires ownership
+        if self.action in ['update', 'partial_update', 'destroy']:
+            return [permissions.IsAuthenticated(), IsVerified(), IsOwnerOrAdmin()]
+        return [permissions.IsAuthenticated(), IsVerified()]
 
     def get_queryset(self):
         # Fix soft-delete bypass: only include non-deleted properties

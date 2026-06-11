@@ -1,11 +1,19 @@
 from rest_framework import viewsets, permissions
 from .models import BrokerProfile, Lead
 from .serializers import BrokerProfileSerializer, LeadSerializer
-from core.permissions import IsBroker
+from core.permissions import IsBroker, IsVerified, IsOwnerOrAdmin
 
 class BrokerProfileViewSet(viewsets.ModelViewSet):
-    permission_classes = [permissions.IsAuthenticated]
     serializer_class = BrokerProfileSerializer
+
+    def get_permissions(self):
+        # Creating a broker profile requires a verified user
+        if self.action == 'create':
+            return [permissions.IsAuthenticated(), IsVerified()]
+        # Updating/deleting requires ownership
+        if self.action in ['update', 'partial_update', 'destroy']:
+            return [permissions.IsAuthenticated(), IsVerified(), IsOwnerOrAdmin()]
+        return [permissions.IsAuthenticated()]
 
     def get_queryset(self):
         return BrokerProfile.objects.filter(user=self.request.user)
